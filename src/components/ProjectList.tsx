@@ -20,7 +20,7 @@ const PROJECTS: Project[] = [
     id: '1', 
     name: 'CHROME FLOW', 
     year: '2024', 
-    color: '#7DF9FF', 
+    color: '#DFFF00', 
     video: PlaceHolderImages[0].imageUrl,
     description: 'Experimental fluid simulation using high-viscosity liquid metal.'
   },
@@ -28,7 +28,7 @@ const PROJECTS: Project[] = [
     id: '2', 
     name: 'SILVER SHIFT', 
     year: '2024', 
-    color: '#7DF9FF', 
+    color: '#DFFF00', 
     video: PlaceHolderImages[1].imageUrl,
     description: 'A study on light dispersion and brushed aluminum reflections.'
   },
@@ -36,7 +36,7 @@ const PROJECTS: Project[] = [
     id: '3', 
     name: 'DARK MERCURY', 
     year: '2023', 
-    color: '#7DF9FF', 
+    color: '#DFFF00', 
     video: PlaceHolderImages[2].imageUrl,
     description: 'Minimalist motion study in a low-gravity vacuum environment.'
   },
@@ -44,7 +44,7 @@ const PROJECTS: Project[] = [
     id: '4', 
     name: 'VOID GEOMETRY', 
     year: '2023', 
-    color: '#7DF9FF', 
+    color: '#DFFF00', 
     video: PlaceHolderImages[3].imageUrl,
     description: 'Procedural generation of monolithic architectural structures.'
   }
@@ -69,7 +69,7 @@ export function ProjectList({
       onMouseMove={handleMouseMove}
     >
       <div className="max-w-7xl mx-auto space-y-0">
-        <h2 className="font-headline text-[9px] tracking-[0.8em] text-muted-foreground mb-24 uppercase opacity-40">
+        <h2 className="font-headline text-[9px] tracking-[0.8em] text-[#DFFF00] mb-24 uppercase opacity-60">
           SELECTED WORKS
         </h2>
         
@@ -84,10 +84,10 @@ export function ProjectList({
             onClick={() => onProjectClick(project)}
             className="group py-12 border-b border-white/5 flex items-center justify-between cursor-pointer transition-all duration-700 hover:pl-6"
           >
-            <h3 className="font-headline text-3xl md:text-5xl tracking-tighter group-hover:text-[#7DF9FF] group-hover:italic transition-all duration-500">
+            <h3 className="font-headline text-2xl md:text-5xl tracking-tighter group-hover:text-[#DFFF00] group-hover:italic transition-all duration-500 text-white">
               {project.name}
             </h3>
-            <span className="font-headline text-[10px] tracking-widest text-muted-foreground group-hover:text-[#7DF9FF] opacity-50">
+            <span className="font-headline text-[10px] tracking-widest text-muted-foreground group-hover:text-[#DFFF00] opacity-50">
               {project.year}
             </span>
           </motion.div>
@@ -107,7 +107,7 @@ export function ProjectList({
               pointerEvents: 'none',
               zIndex: 100
             }}
-            className="w-80 h-48 overflow-hidden border border-[#7DF9FF]/20 bg-black shadow-[0_0_50px_rgba(125,249,255,0.05)]"
+            className="w-80 h-48 overflow-hidden border border-[#DFFF00]/20 bg-black shadow-[0_0_50px_rgba(223,255,0,0.1)]"
           >
             <Image 
               src={activeProject.video} 

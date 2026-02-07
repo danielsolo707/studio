@@ -2,7 +2,7 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { MotionSphereCanvas } from '@/components/MotionSphere';
 import { TypographicHero } from '@/components/TypographicHero';
@@ -16,12 +16,17 @@ export default function Home() {
   
   const { scrollYProgress } = useScroll();
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 50,
+    damping: 20,
     restDelta: 0.001
   });
 
-  const backgroundOpacity = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 0.5]);
+  const [currentProgress, setCurrentProgress] = useState(0);
+  useEffect(() => {
+    return smoothProgress.onChange(v => setCurrentProgress(v));
+  }, [smoothProgress]);
+
+  const backgroundOpacity = useTransform(smoothProgress, [0, 0.4, 0.6, 1], [1, 0.8, 0.4, 0.2]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -35,7 +40,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="relative min-h-[500vh] bg-black overflow-x-hidden">
+    <main className="relative min-h-[600vh] bg-[#030305] overflow-x-hidden">
       {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
       
       {loaded && (
@@ -44,12 +49,11 @@ export default function Home() {
             style={{ opacity: backgroundOpacity }}
             className="fixed inset-0 z-0"
           >
-            <MotionSphereCanvas mousePos={mousePos} />
+            <MotionSphereCanvas mousePos={mousePos} scrollProgress={currentProgress} />
           </motion.div>
 
           <TypographicHero />
 
-          {/* Project List Section First */}
           <div className="relative z-20">
             <ProjectList 
               onHover={() => {}}
@@ -57,13 +61,12 @@ export default function Home() {
             />
           </div>
 
-          {/* About Section moved below Projects */}
-          <section className="relative z-20 min-h-screen flex items-center px-12 md:px-24 py-32">
+          <section className="relative z-20 min-h-screen flex items-center px-12 md:px-24 py-32 bg-black/40 backdrop-blur-sm">
             <div className="max-w-4xl">
               <motion.p 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.4 }}
-                className="font-headline text-[10px] tracking-[0.5em] mb-12"
+                className="font-headline text-[10px] tracking-[0.5em] mb-12 text-[#DFFF00]"
               >
                 ABOUT DANIEL
               </motion.p>
@@ -72,9 +75,9 @@ export default function Home() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="font-headline text-4xl md:text-7xl mb-12 leading-[1.1] tracking-tighter"
+                className="font-headline text-4xl md:text-7xl mb-12 leading-[1.1] tracking-tighter text-white"
               >
-                CRAFTING DIGITAL MOVEMENT
+                CRAFTING <span className="text-[#DFFF00]">DIGITAL</span> MOVEMENT
               </motion.h2>
               
               <motion.p 
@@ -87,25 +90,24 @@ export default function Home() {
                 Specializing in high-end motion graphics and immersive 3D experiences that bridge the gap between imagination and reality.
               </motion.p>
 
-              <div className="flex flex-wrap gap-x-8 gap-y-4 font-headline text-[9px] tracking-[0.3em] opacity-30">
-                <span>AFTER EFFECTS</span>
+              <div className="flex flex-wrap gap-x-8 gap-y-4 font-headline text-[9px] tracking-[0.3em] opacity-40">
+                <span className="hover:text-[#DFFF00] transition-colors cursor-default">AFTER EFFECTS</span>
                 <span>/</span>
-                <span>CINEMA 4D</span>
+                <span className="hover:text-[#DFFF00] transition-colors cursor-default">CINEMA 4D</span>
                 <span>/</span>
-                <span>BLENDER</span>
+                <span className="hover:text-[#DFFF00] transition-colors cursor-default">BLENDER</span>
                 <span>/</span>
-                <span>UNREAL ENGINE</span>
+                <span className="hover:text-[#DFFF00] transition-colors cursor-default">UNREAL ENGINE</span>
               </div>
             </div>
           </section>
 
-          {/* Final "Let's Talk" Section */}
-          <section className="relative h-screen flex flex-col items-center justify-center z-20 bg-black">
+          <section className="relative h-screen flex flex-col items-center justify-center z-20">
             <div className="text-center space-y-4">
               <motion.p 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.4 }}
-                className="font-headline text-[10px] tracking-[0.5em] uppercase"
+                className="font-headline text-[10px] tracking-[0.5em] uppercase text-[#DFFF00]"
               >
                 GET IN TOUCH
               </motion.p>
@@ -116,7 +118,7 @@ export default function Home() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
               >
-                <h2 className="font-headline text-5xl md:text-[10vw] tracking-tighter italic text-white group-hover:text-[#7DF9FF] group-hover:electric-glow transition-all duration-500">
+                <h2 className="font-headline text-5xl md:text-[10vw] tracking-tighter italic text-white group-hover:text-[#DFFF00] group-hover:acid-glow transition-all duration-500">
                   LET&apos;S TALK
                 </h2>
               </motion.a>
@@ -125,8 +127,8 @@ export default function Home() {
             <footer className="absolute bottom-12 w-full flex justify-between px-12 text-[8px] font-headline tracking-[0.5em] text-muted-foreground uppercase">
               <div className="opacity-40">© 2026 DANIEL PORTFOLIO</div>
               <div className="flex gap-12">
-                <a href="#" className="hover:text-[#7DF9FF] transition-colors">Instagram</a>
-                <a href="#" className="hover:text-[#7DF9FF] transition-colors">Vimeo</a>
+                <a href="#" className="hover:text-[#DFFF00] transition-colors">Instagram</a>
+                <a href="#" className="hover:text-[#DFFF00] transition-colors">Vimeo</a>
               </div>
             </footer>
           </section>

@@ -1,8 +1,9 @@
+
 "use client"
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, PlayCircle } from 'lucide-react';
 import Image from 'next/image';
 
 interface Project {
@@ -39,12 +40,12 @@ export function ProjectOverlay({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] bg-black flex flex-col"
+          className="fixed inset-0 z-[100] bg-[#030305] flex flex-col overflow-y-auto"
         >
           <motion.div 
-            className="absolute inset-0 z-0"
+            className="relative w-full aspect-video md:h-[70vh] z-0 overflow-hidden"
             initial={{ scale: 1.1, opacity: 0 }}
-            animate={{ scale: 1, opacity: 0.4 }}
+            animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
           >
             <Image 
@@ -54,22 +55,31 @@ export function ProjectOverlay({
               className="object-cover"
               data-ai-hint="motion design"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#030305] via-transparent to-transparent" />
+            <div className="absolute inset-0 flex items-center justify-center">
+               <motion.div
+                 initial={{ opacity: 0, scale: 0.5 }}
+                 animate={{ opacity: 1, scale: 1 }}
+                 className="text-[#DFFF00]"
+               >
+                 <PlayCircle size={80} strokeWidth={1} />
+               </motion.div>
+            </div>
           </motion.div>
 
-          <div className="relative z-10 flex-1 flex flex-col justify-end p-8 md:p-24">
+          <div className="relative z-10 flex-1 flex flex-col p-8 md:p-24 bg-[#030305]">
             <motion.button
               onClick={onClose}
-              className="absolute top-12 left-12 flex items-center gap-2 font-headline text-[10px] tracking-[0.4em] text-white hover:text-[#7DF9FF] transition-colors"
+              className="absolute top-12 left-12 flex items-center gap-2 font-headline text-[10px] tracking-[0.4em] text-white hover:text-[#DFFF00] transition-colors"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
             >
               <ArrowLeft size={16} /> BACK TO LIST
             </motion.button>
 
-            <div className="max-w-5xl space-y-8">
+            <div className="max-w-5xl space-y-12 mt-12">
               <motion.h2 
-                className="font-headline text-5xl md:text-[10vw] leading-none tracking-tighter italic"
+                className="font-headline text-5xl md:text-[8vw] leading-none tracking-tighter italic text-white"
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5 }}
@@ -82,19 +92,23 @@ export function ProjectOverlay({
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="space-y-8"
+                    className="space-y-12"
                   >
                     <p className="font-body text-xl md:text-3xl text-white/60 max-w-3xl leading-relaxed">
                       {project.description}
                     </p>
-                    <div className="flex gap-16 pt-8 border-t border-white/10">
+                    <div className="flex flex-wrap gap-16 pt-12 border-t border-white/10">
                       <div>
-                        <p className="text-[10px] uppercase tracking-[0.5em] text-[#7DF9FF] mb-2">YEAR</p>
+                        <p className="text-[10px] uppercase tracking-[0.5em] text-[#DFFF00] mb-4">YEAR</p>
                         <p className="font-headline text-lg">{project.year}</p>
                       </div>
                       <div>
-                        <p className="text-[10px] uppercase tracking-[0.5em] text-[#7DF9FF] mb-2">SPECIALIZATION</p>
-                        <p className="font-headline text-lg">3D MOTION</p>
+                        <p className="text-[10px] uppercase tracking-[0.5em] text-[#DFFF00] mb-4">SPECIALIZATION</p>
+                        <p className="font-headline text-lg">HIGH-END MOTION</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-[0.5em] text-[#DFFF00] mb-4">TOOLS</p>
+                        <p className="font-headline text-lg">C4D / AE / OCTANE</p>
                       </div>
                     </div>
                   </motion.div>

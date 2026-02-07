@@ -1,28 +1,29 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 0%;
+    --background: 240 25% 1%;
     --foreground: 0 0% 100%;
-    --card: 0 0% 3%;
+    --card: 240 25% 2%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3%;
+    --popover: 240 25% 2%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
-    --secondary: 0 0% 8%;
+    --secondary: 240 10% 8%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 50%;
-    --accent: 184 100% 74%;
+    --muted: 240 10% 12%;
+    --muted-foreground: 240 5% 60%;
+    --accent: 67 100% 44%; /* Acid Green #DFFF00 HSL */
     --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 15%;
-    --input: 0 0% 10%;
-    --ring: 184 100% 74%;
+    --border: 240 10% 15%;
+    --input: 240 10% 10%;
+    --ring: 67 100% 44%;
     --radius: 0rem;
   }
 }
@@ -32,7 +33,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground selection:bg-[#7DF9FF] selection:text-black overflow-x-hidden;
+    @apply bg-background text-foreground selection:bg-[#DFFF00] selection:text-black overflow-x-hidden;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
 }
@@ -41,16 +42,17 @@
   font-family: 'Syncopate', sans-serif;
   text-transform: uppercase;
   letter-spacing: -0.05em;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
 }
 
-.electric-glow {
-  text-shadow: 0 0 20px rgba(125, 249, 255, 0.5), 0 0 40px rgba(125, 249, 255, 0.3);
+.acid-glow {
+  text-shadow: 0 0 15px rgba(223, 255, 0, 0.6), 0 0 30px rgba(223, 255, 0, 0.3);
 }
 
-.electric-button-hover:hover {
-  color: #7DF9FF;
-  border-color: #7DF9FF;
-  text-shadow: 0 0 10px rgba(125, 249, 255, 0.5);
+.acid-button-hover:hover {
+  color: #DFFF00;
+  border-color: #DFFF00;
+  text-shadow: 0 0 10px rgba(223, 255, 0, 0.5);
 }
 
 /* Custom Scrollbar */
@@ -61,5 +63,5 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(223, 255, 0, 0.1);
 }
