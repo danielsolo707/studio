@@ -1,7 +1,7 @@
 
 "use client"
 
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import * as THREE from 'three';
@@ -41,9 +41,11 @@ function FloatingObjects({ mousePos, scrollProgress }: {
     camera.rotation.y = THREE.MathUtils.lerp(camera.rotation.y, mousePos.x * 0.05, 0.05);
     camera.rotation.x = THREE.MathUtils.lerp(camera.rotation.x, -mousePos.y * 0.05, 0.05);
 
-    groupRef.current.children.forEach((child, i) => {
+    const children = groupRef.current.children;
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
       const obj = objects[i];
-      if (!obj) return;
+      if (!obj) continue;
 
       // Ambient Motion
       child.position.y += Math.sin(time * obj.speed + obj.offset) * 0.005;
@@ -60,7 +62,7 @@ function FloatingObjects({ mousePos, scrollProgress }: {
       child.position.z = obj.position[2] + dir.z * flyPastFactor;
       
       child.rotation.y += scrollProgress * 0.1;
-    });
+    }
   });
 
   return (
@@ -111,6 +113,16 @@ export function MotionSphereCanvas({ mousePos, scrollProgress }: {
   mousePos: { x: number; y: number };
   scrollProgress: number;
 }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <div className="fixed inset-0 z-0 bg-[#030305]" />;
+  }
+
   return (
     <div className="fixed inset-0 pointer-events-none z-0 bg-[#030305]">
       <Canvas camera={{ position: [0, 0, 12], fov: 45 }}>
