@@ -1,94 +1,83 @@
+
 "use client"
 
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-function MercurySphere({ scrollProgress, mousePos, hoverColor }: { 
-  scrollProgress: number; 
-  mousePos: { x: number; y: number };
-  hoverColor?: string;
-}) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshPhysicalMaterial>(null);
+function GlassShards({ mousePos }: { mousePos: { x: number; y: number } }) {
+  const groupRef = useRef<THREE.Group>(null);
+  
+  // Create a set of random shards
+  const shards = useMemo(() => {
+    return Array.from({ length: 12 }).map((_, i) => ({
+      position: [
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 5
+      ] as [number, number, number],
+      rotation: [Math.random() * Math.PI, Math.random() * Math.PI, 0] as [number, number, number],
+      scale: 0.5 + Math.random() * 1.5,
+      speed: 0.1 + Math.random() * 0.4
+    }));
+  }, []);
 
   useFrame((state) => {
-    if (!meshRef.current || !materialRef.current) return;
-    
+    if (!groupRef.current) return;
     const time = state.clock.getElapsedTime();
-    
-    // Heavier rotation movement
-    meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, mousePos.x * 0.2, 0.02);
-    meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, -mousePos.y * 0.2, 0.02);
 
-    // Dynamic scale based on scroll and hover
-    const baseScale = 1.8;
-    const targetScale = hoverColor ? [baseScale * 1.2, baseScale * 1.2, 0.3] : [baseScale, baseScale, baseScale];
-    meshRef.current.scale.x = THREE.MathUtils.lerp(meshRef.current.scale.x, targetScale[0], 0.05);
-    meshRef.current.scale.y = THREE.MathUtils.lerp(meshRef.current.scale.y, targetScale[1], 0.05);
-    meshRef.current.scale.z = THREE.MathUtils.lerp(meshRef.current.scale.z, targetScale[2], 0.05);
+    // Smooth rotation of the whole group based on mouse
+    groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, mousePos.x * 0.4, 0.05);
+    groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -mousePos.y * 0.4, 0.05);
 
-    // Liquid metal surface deformation
-    const vertices = meshRef.current.geometry.attributes.position;
-    for (let i = 0; i < vertices.count; i++) {
-      const x = vertices.getX(i);
-      const y = vertices.getY(i);
-      const z = vertices.getZ(i);
-      
-      // Heavy fluid noise
-      const noise = Math.sin(x * 1.5 + time * 0.5) * Math.cos(y * 1.5 + time * 0.8) * 0.15;
-      
-      // Reactive "dent" from mouse
-      const mouseDist = Math.sqrt(Math.pow(x - mousePos.x * 3, 2) + Math.pow(y - mousePos.y * 3, 2));
-      const reactive = Math.max(0, 1.2 - mouseDist) * 0.3;
-
-      const newScale = 1 + noise + reactive;
-      vertices.setXYZ(i, x * newScale, y * newScale, z * newScale);
-    }
-    vertices.needsUpdate = true;
-
-    // Monochrome chrome transitions
-    if (hoverColor) {
-      materialRef.current.emissive.lerp(new THREE.Color(hoverColor), 0.05);
-      materialRef.current.emissiveIntensity = THREE.MathUtils.lerp(materialRef.current.emissiveIntensity, 0.3, 0.05);
-    } else {
-      materialRef.current.emissive.lerp(new THREE.Color("#ffffff"), 0.02);
-      materialRef.current.emissiveIntensity = THREE.MathUtils.lerp(materialRef.current.emissiveIntensity, 0.05, 0.02);
-    }
+    // Individual shard animation
+    groupRef.current.children.forEach((child, i) => {
+      const shard = shards[i];
+      child.rotation.x += 0.002 * shard.speed;
+      child.rotation.y += 0.003 * shard.speed;
+      child.position.y += Math.sin(time * shard.speed) * 0.002;
+    });
   });
 
   return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[1.5, 128, 128]} />
-      <meshPhysicalMaterial
-        ref={materialRef}
-        color="#0a0a0a"
-        metalness={1}
-        roughness={0.02}
-        clearcoat={1}
-        clearcoatRoughness={0}
-        reflectivity={1}
-        emissive="#ffffff"
-        emissiveIntensity={0.05}
-        envMapIntensity={5}
-      />
-    </mesh>
+    <group ref={groupRef}>
+      {shards.map((shard, i) => (
+        <mesh 
+          key={i} 
+          position={shard.position} 
+          rotation={shard.rotation} 
+          scale={shard.scale}
+        >
+          <icosahedronGeometry args={[1, 0]} />
+          <meshPhysicalMaterial
+            transmission={0.95}
+            thickness={2}
+            roughness={0.05}
+            envMapIntensity={2}
+            clearcoat={1}
+            reflectivity={1}
+            color="#ffffff"
+            metalness={0.1}
+            ior={1.5}
+            transparent
+            opacity={0.4}
+          />
+        </mesh>
+      ))}
+    </group>
   );
 }
 
-export function MotionSphereCanvas({ scrollProgress, mousePos, hoverColor }: { 
-  scrollProgress: number; 
+export function MotionSphereCanvas({ mousePos }: { 
   mousePos: { x: number; y: number };
-  hoverColor?: string;
 }) {
   return (
-    <div className="fixed inset-0 pointer-events-none z-0">
-      <Canvas camera={{ position: [0, 0, 5], fov: 40 }}>
-        <ambientLight intensity={0.2} />
-        <pointLight position={[10, 10, 10]} intensity={3} color="#ffffff" />
-        <pointLight position={[-10, -10, 5]} intensity={2} color="#ffffff" />
-        <spotLight position={[0, 10, 0]} angle={0.5} penumbra={1} intensity={4} color="#ffffff" />
-        <MercurySphere scrollProgress={scrollProgress} mousePos={mousePos} hoverColor={hoverColor} />
+    <div className="fixed inset-0 pointer-events-none z-0 bg-black">
+      <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+        <ambientLight intensity={0.5} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={2} />
+        <pointLight position={[-10, -10, -10]} intensity={1} color="#ffffff" />
+        <GlassShards mousePos={mousePos} />
       </Canvas>
     </div>
   );
