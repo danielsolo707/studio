@@ -1,10 +1,11 @@
 
 "use client"
 
-import React, { useRef, useMemo, useState, useEffect } from 'react';
+import React, { useRef, useMemo, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import * as THREE from 'three';
+import dynamic from 'next/dynamic';
 
 function FloatingObjects({ mousePos, scrollProgress }: { 
   mousePos: { x: number; y: number };
@@ -13,7 +14,6 @@ function FloatingObjects({ mousePos, scrollProgress }: {
   const groupRef = useRef<THREE.Group>(null);
   const { camera } = useThree();
   
-  // Create 25 independent objects
   const objects = useMemo(() => {
     return Array.from({ length: 25 }).map((_, i) => {
       const type = i % 4; // 0: Keyframe, 1: Path, 2: Torus, 3: Icosahedron
@@ -28,13 +28,13 @@ function FloatingObjects({ mousePos, scrollProgress }: {
         scale: 0.5 + Math.random() * 1.5,
         speed: 0.2 + Math.random() * 0.5,
         offset: Math.random() * 10,
-        color: i % 2 === 0 ? "#BF00FF" : "#00F2FF" // Purple or Cyan
+        color: i % 2 === 0 ? "#BF00FF" : "#00F2FF"
       };
     });
   }, []);
 
   useFrame((state) => {
-    if (!groupRef.current) return;
+    if (!groupRef.current || !camera) return;
     const time = state.clock.getElapsedTime();
 
     // Camera tilt follow mouse
@@ -42,13 +42,15 @@ function FloatingObjects({ mousePos, scrollProgress }: {
     camera.rotation.x = THREE.MathUtils.lerp(camera.rotation.x, -mousePos.y * 0.05, 0.05);
 
     const children = groupRef.current.children;
+    if (!children || children.length === 0) return;
+
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
       const obj = objects[i];
-      if (!obj) continue;
+      if (!obj || !child) continue;
 
       // Ambient Motion
-      child.position.y += Math.sin(time * obj.speed + obj.offset) * 0.005;
+      child.position.y += Math.sin(time * obj.speed + obj.offset) * 0.002;
       child.rotation.x += 0.01 * obj.speed;
       child.rotation.z += 0.005 * obj.speed;
 
@@ -109,35 +111,46 @@ function FloatingObjects({ mousePos, scrollProgress }: {
   );
 }
 
-export function MotionSphereCanvas({ mousePos, scrollProgress }: { 
+function Scene({ mousePos, scrollProgress }: { 
   mousePos: { x: number; y: number };
   scrollProgress: number;
 }) {
-  const [mounted, setMounted] = useState(false);
+  return (
+    <>
+      <color attach="background" args={['#030305']} />
+      <pointLight position={[-10, 5, 5]} color="#BF00FF" intensity={50} />
+      <pointLight position={[10, -5, 5]} color="#00F2FF" intensity={50} />
+      <ambientLight intensity={0.1} />
+      <FloatingObjects mousePos={mousePos} scrollProgress={scrollProgress} />
+      <EffectComposer disableNormalPass>
+        <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.9} intensity={1.5} />
+      </EffectComposer>
+    </>
+  );
+}
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return <div className="fixed inset-0 z-0 bg-[#030305]" />;
-  }
-
+// Internal component that uses Fiber
+function MotionSphereInner({ mousePos, scrollProgress }: { 
+  mousePos: { x: number; y: number };
+  scrollProgress: number;
+}) {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 bg-[#030305]">
-      <Canvas camera={{ position: [0, 0, 12], fov: 45 }}>
-        <color attach="background" args={['#030305']} />
-        
-        <pointLight position={[-10, 5, 5]} color="#BF00FF" intensity={50} />
-        <pointLight position={[10, -5, 5]} color="#00F2FF" intensity={50} />
-        <ambientLight intensity={0.1} />
-
-        <FloatingObjects mousePos={mousePos} scrollProgress={scrollProgress} />
-        
-        <EffectComposer>
-          <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.9} intensity={1.5} />
-        </EffectComposer>
+      <Canvas 
+        camera={{ position: [0, 0, 12], fov: 45 }}
+        dpr={[1, 2]}
+        gl={{ antialias: true, alpha: false }}
+      >
+        <Suspense fallback={null}>
+          <Scene mousePos={mousePos} scrollProgress={scrollProgress} />
+        </Suspense>
       </Canvas>
     </div>
   );
 }
+
+// Export a dynamically imported version to guarantee client-side only execution
+export const MotionSphereCanvas = dynamic(
+  () => Promise.resolve(MotionSphereInner),
+  { ssr: false }
+);
