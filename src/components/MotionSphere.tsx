@@ -129,11 +129,18 @@ function Scene({ mousePos, scrollProgress }: {
   );
 }
 
-// Internal component that uses Fiber
 function MotionSphereInner({ mousePos, scrollProgress }: { 
   mousePos: { x: number; y: number };
   scrollProgress: number;
 }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <div className="fixed inset-0 pointer-events-none z-0 bg-[#030305]">
       <Canvas 
@@ -149,7 +156,6 @@ function MotionSphereInner({ mousePos, scrollProgress }: {
   );
 }
 
-// Export a dynamically imported version to guarantee client-side only execution
 export const MotionSphereCanvas = dynamic(
   () => Promise.resolve(MotionSphereInner),
   { ssr: false }
