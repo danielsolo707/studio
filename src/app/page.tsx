@@ -1,4 +1,3 @@
-
 "use client"
 
 import React, { useState, useEffect } from 'react';
@@ -8,7 +7,6 @@ import { MotionSphereCanvas } from '@/components/MotionSphere';
 import { TypographicHero } from '@/components/TypographicHero';
 import { ProjectList } from '@/components/ProjectList';
 import { ProjectOverlay } from '@/components/ProjectOverlay';
-import { PortfolioAI } from '@/components/PortfolioAI';
 import { Button } from '@/components/ui/button';
 
 export default function Home() {
@@ -18,7 +16,7 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   
   const { scrollYProgress } = useScroll();
-  const footerShrink = useTransform(scrollYProgress, [0.95, 1], [1, 0.01]);
+  const sphereOpacity = useTransform(scrollYProgress, [0.8, 0.95], [1, 0.4]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -32,17 +30,19 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="relative min-h-screen bg-background overflow-x-hidden">
+    <main className="relative min-h-[300vh] bg-background overflow-x-hidden">
       {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
       
       {loaded && (
         <>
           {/* Mercury Sphere Background */}
-          <MotionSphereCanvas 
-            scrollProgress={0} // We can derive this from useScroll if needed
-            mousePos={mousePos}
-            hoverColor={hoverColor}
-          />
+          <motion.div style={{ opacity: sphereOpacity }}>
+            <MotionSphereCanvas 
+              scrollProgress={0} 
+              mousePos={mousePos}
+              hoverColor={hoverColor}
+            />
+          </motion.div>
 
           {/* Hero Section */}
           <TypographicHero />
@@ -53,42 +53,33 @@ export default function Home() {
             onProjectClick={(p) => setSelectedProject(p)}
           />
 
-          {/* GenAI Tool */}
-          <PortfolioAI />
-
           {/* Contact Section */}
-          <section className="relative h-screen flex flex-col items-center justify-center z-20 overflow-hidden">
-            <div className="text-center space-y-8">
+          <section className="relative h-screen flex flex-col items-center justify-center z-20 overflow-hidden bg-black/80 backdrop-blur-sm">
+            <div className="text-center space-y-12">
               <motion.h2 
-                className="font-headline text-4xl md:text-8xl tracking-tighter"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+                className="font-headline text-5xl md:text-8xl tracking-tighter"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ margin: "-100px" }}
               >
-                READY TO<br/>COLLABORATE?
+                LET'S CREATE<br/>THE FUTURE
               </motion.h2>
               
               <div className="relative group">
                 <Button 
-                  className="bg-transparent border border-accent text-accent hover:bg-accent hover:text-accent-foreground px-12 py-8 rounded-full font-headline tracking-[0.3em] transition-all duration-500"
+                  className="bg-white text-black border-none px-16 py-10 rounded-none font-headline tracking-[0.4em] text-xs transition-all duration-500 hover:scale-110 active:scale-95"
                 >
-                  GET IN TOUCH
+                  START A PROJECT
                 </Button>
-                
-                {/* Contact Transition Mercury Point */}
-                <motion.div 
-                  style={{ scale: footerShrink }}
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-accent blur-md rounded-full pointer-events-none"
-                />
               </div>
             </div>
 
-            <footer className="absolute bottom-12 w-full flex justify-between px-12 text-[10px] font-headline tracking-widest text-muted-foreground uppercase">
-              <div>© 2024 MotionVerse</div>
-              <div className="flex gap-8">
-                <a href="#" className="hover:text-accent transition-colors">Behance</a>
-                <a href="#" className="hover:text-accent transition-colors">Vimeo</a>
-                <a href="#" className="hover:text-accent transition-colors">LinkedIn</a>
+            <footer className="absolute bottom-12 w-full flex justify-between px-12 text-[9px] font-headline tracking-[0.4em] text-muted-foreground uppercase">
+              <div>© 2026 MOTION DESIGN STUDIO</div>
+              <div className="flex gap-12">
+                <a href="#" className="hover:text-white transition-colors">Instagram</a>
+                <a href="#" className="hover:text-white transition-colors">Vimeo</a>
+                <a href="#" className="hover:text-white transition-colors">Behance</a>
               </div>
             </footer>
           </section>

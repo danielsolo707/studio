@@ -1,29 +1,28 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 240 10% 3%;
-    --foreground: 210 20% 98%;
-    --card: 240 10% 5%;
-    --card-foreground: 210 20% 98%;
-    --popover: 240 10% 5%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 234 66% 30%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 240 10% 10%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 240 10% 15%;
-    --muted-foreground: 210 10% 70%;
-    --accent: 182 100% 75%;
-    --accent-foreground: 240 10% 5%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 0 0% 100%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 240 10% 15%;
-    --input: 240 10% 15%;
-    --ring: 182 100% 75%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 20%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 100%;
     --radius: 0.5rem;
   }
 }
@@ -33,16 +32,22 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground selection:bg-accent selection:text-accent-foreground overflow-x-hidden;
+    @apply bg-background text-foreground selection:bg-white selection:text-black overflow-x-hidden;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
 }
 
 .text-stroke {
-  -webkit-text-stroke: 1px currentColor;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
   color: transparent;
 }
 
 canvas {
   touch-action: none;
+}
+
+.font-headline {
+  font-family: 'Syncopate', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
 }
