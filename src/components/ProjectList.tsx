@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { useState } from 'react';
@@ -67,8 +68,8 @@ export function ProjectList({
       className="relative z-20 min-h-screen py-[20vh] px-6 md:px-24"
       onMouseMove={handleMouseMove}
     >
-      <div className="max-w-7xl mx-auto space-y-2">
-        <h2 className="font-headline text-[10px] tracking-[0.8em] text-muted-foreground mb-32 uppercase opacity-40">
+      <div className="max-w-7xl mx-auto space-y-0">
+        <h2 className="font-headline text-[9px] tracking-[0.8em] text-muted-foreground mb-24 uppercase opacity-40">
           SELECTED WORKS
         </h2>
         
@@ -77,16 +78,16 @@ export function ProjectList({
             key={project.id}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-50px" }}
             onMouseEnter={() => setActiveProject(project)}
             onMouseLeave={() => setActiveProject(null)}
             onClick={() => onProjectClick(project)}
-            className="group py-16 border-b border-white/5 flex items-baseline justify-between cursor-pointer transition-all duration-700 hover:pl-8"
+            className="group py-12 border-b border-white/5 flex items-center justify-between cursor-pointer transition-all duration-700 hover:pl-6"
           >
-            <h3 className="font-headline text-5xl md:text-9xl group-hover:text-[#7DF9FF] group-hover:italic transition-all duration-500">
+            <h3 className="font-headline text-3xl md:text-5xl tracking-tighter group-hover:text-[#7DF9FF] group-hover:italic transition-all duration-500">
               {project.name}
             </h3>
-            <span className="font-headline text-xs tracking-widest text-muted-foreground group-hover:text-[#7DF9FF]">
+            <span className="font-headline text-[10px] tracking-widest text-muted-foreground group-hover:text-[#7DF9FF] opacity-50">
               {project.year}
             </span>
           </motion.div>
@@ -96,23 +97,23 @@ export function ProjectList({
       <AnimatePresence>
         {activeProject && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 10 }}
             style={{ 
               position: 'fixed',
-              left: mousePos.x + 40,
-              top: mousePos.y + 40,
+              left: mousePos.x + 30,
+              top: mousePos.y + 30,
               pointerEvents: 'none',
               zIndex: 100
             }}
-            className="w-96 h-56 overflow-hidden border border-[#7DF9FF]/20 bg-black shadow-[0_0_50px_rgba(125,249,255,0.1)]"
+            className="w-80 h-48 overflow-hidden border border-[#7DF9FF]/20 bg-black shadow-[0_0_50px_rgba(125,249,255,0.05)]"
           >
             <Image 
               src={activeProject.video} 
               alt={activeProject.name}
               fill
-              className="object-cover grayscale hover:grayscale-0 transition-all duration-500"
+              className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
               data-ai-hint="motion design"
             />
           </motion.div>
