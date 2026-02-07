@@ -19,38 +19,37 @@ const PROJECTS: Project[] = [
     id: '1', 
     name: 'CHROME FLOW', 
     year: '2024', 
-    color: '#FFFFFF', 
+    color: '#7DF9FF', 
     video: PlaceHolderImages[0].imageUrl,
-    description: 'A deep dive into high-viscosity liquid metal simulations.'
+    description: 'Experimental fluid simulation using high-viscosity liquid metal.'
   },
   { 
     id: '2', 
     name: 'SILVER SHIFT', 
     year: '2024', 
-    color: '#A0A0A0', 
+    color: '#7DF9FF', 
     video: PlaceHolderImages[1].imageUrl,
-    description: 'Exploring light dispersion on brushed aluminum surfaces.'
+    description: 'A study on light dispersion and brushed aluminum reflections.'
   },
   { 
     id: '3', 
     name: 'DARK MERCURY', 
     year: '2023', 
-    color: '#333333', 
+    color: '#7DF9FF', 
     video: PlaceHolderImages[2].imageUrl,
-    description: 'Minimalist fluid dynamics in low-gravity environments.'
+    description: 'Minimalist motion study in a low-gravity vacuum environment.'
   },
   { 
     id: '4', 
     name: 'VOID GEOMETRY', 
     year: '2023', 
-    color: '#FFFFFF', 
+    color: '#7DF9FF', 
     video: PlaceHolderImages[3].imageUrl,
-    description: 'Synchronized movement of architectural monoliths.'
+    description: 'Procedural generation of monolithic architectural structures.'
   }
 ];
 
 export function ProjectList({ 
-  onHover, 
   onProjectClick 
 }: { 
   onHover: (color?: string) => void;
@@ -65,12 +64,12 @@ export function ProjectList({
 
   return (
     <div 
-      className="relative z-20 min-h-screen pt-[40vh] pb-[20vh] px-6 md:px-24"
+      className="relative z-20 min-h-screen py-[20vh] px-6 md:px-24"
       onMouseMove={handleMouseMove}
     >
       <div className="max-w-7xl mx-auto space-y-2">
         <h2 className="font-headline text-[10px] tracking-[0.8em] text-muted-foreground mb-32 uppercase opacity-40">
-          FEATURED PROJECTS
+          SELECTED WORKS
         </h2>
         
         {PROJECTS.map((project) => (
@@ -79,21 +78,15 @@ export function ProjectList({
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            onMouseEnter={() => {
-              setActiveProject(project);
-              onHover(project.color);
-            }}
-            onMouseLeave={() => {
-              setActiveProject(null);
-              onHover(undefined);
-            }}
+            onMouseEnter={() => setActiveProject(project)}
+            onMouseLeave={() => setActiveProject(null)}
             onClick={() => onProjectClick(project)}
-            className="group py-12 border-b border-white/5 flex items-baseline justify-between cursor-none transition-all duration-700 hover:pl-8"
+            className="group py-16 border-b border-white/5 flex items-baseline justify-between cursor-pointer transition-all duration-700 hover:pl-8"
           >
-            <h3 className="font-headline text-5xl md:text-8xl group-hover:text-white transition-colors duration-500">
+            <h3 className="font-headline text-5xl md:text-9xl group-hover:text-[#7DF9FF] group-hover:italic transition-all duration-500">
               {project.name}
             </h3>
-            <span className="font-headline text-xs tracking-widest text-muted-foreground group-hover:text-white">
+            <span className="font-headline text-xs tracking-widest text-muted-foreground group-hover:text-[#7DF9FF]">
               {project.year}
             </span>
           </motion.div>
@@ -103,24 +96,24 @@ export function ProjectList({
       <AnimatePresence>
         {activeProject && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, scale: 0.9, rotate: 5 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
             style={{ 
               position: 'fixed',
-              left: mousePos.x + 30,
-              top: mousePos.y + 30,
+              left: mousePos.x + 40,
+              top: mousePos.y + 40,
               pointerEvents: 'none',
               zIndex: 100
             }}
-            className="w-96 h-56 overflow-hidden rounded-sm shadow-[0_0_100px_rgba(255,255,255,0.1)] border border-white/10 bg-black"
+            className="w-96 h-56 overflow-hidden border border-[#7DF9FF]/20 bg-black shadow-[0_0_50px_rgba(125,249,255,0.1)]"
           >
             <Image 
               src={activeProject.video} 
               alt={activeProject.name}
               fill
-              className="object-cover grayscale"
-              data-ai-hint="chrome motion"
+              className="object-cover grayscale hover:grayscale-0 transition-all duration-500"
+              data-ai-hint="motion design"
             />
           </motion.div>
         )}
