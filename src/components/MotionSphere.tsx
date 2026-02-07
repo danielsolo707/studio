@@ -1,7 +1,6 @@
-
 "use client"
 
-import React, { useRef, useMemo, useEffect } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -13,12 +12,6 @@ function MercurySphere({ scrollProgress, mousePos, hoverColor }: {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshPhysicalMaterial>(null);
 
-  const { viewport } = useThree();
-
-  const uniforms = useMemo(() => ({
-    time: { value: 0 }
-  }), []);
-
   useFrame((state) => {
     if (!meshRef.current || !materialRef.current) return;
     
@@ -28,12 +21,10 @@ function MercurySphere({ scrollProgress, mousePos, hoverColor }: {
     meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, mousePos.x * 0.5, 0.05);
     meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, -mousePos.y * 0.5, 0.05);
 
-    // Deformation based on scroll (Typographic Parallax Phase)
-    // First 30% of scroll is deformation
-    const deformation = Math.min(scrollProgress * 2.5, 1);
+    // Deformation based on scroll
     const boilStrength = scrollProgress > 0.3 ? (scrollProgress - 0.3) * 2 : 0;
     
-    // Scale deforms into a "boiling mass" or a "flat disk"
+    // Scale deforms into a flat disk on hover
     const targetScale = hoverColor ? [1.5, 1.5, 0.1] : [1, 1, 1];
     meshRef.current.scale.x = THREE.MathUtils.lerp(meshRef.current.scale.x, targetScale[0], 0.1);
     meshRef.current.scale.y = THREE.MathUtils.lerp(meshRef.current.scale.y, targetScale[1], 0.1);
@@ -46,10 +37,7 @@ function MercurySphere({ scrollProgress, mousePos, hoverColor }: {
       const y = vertices.getY(i);
       const z = vertices.getZ(i);
       
-      const distance = Math.sqrt(x * x + y * y + z * z);
       const noise = Math.sin(x * 2 + time * 2) * Math.cos(y * 2 + time * 1.5) * (0.1 + boilStrength * 0.5);
-      
-      // Reactive noise near mouse
       const mouseDist = Math.sqrt(Math.pow(x - mousePos.x * 2, 2) + Math.pow(y - mousePos.y * 2, 2));
       const reactive = Math.max(0, 1 - mouseDist) * 0.2;
 
