@@ -5,15 +5,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
-
-interface Project {
-  id: string;
-  name: string;
-  year: string;
-  color: string;
-  video: string;
-  description: string;
-}
+import type { Project } from '@/types/project';
 
 const PROJECTS: Project[] = [
   { 
@@ -82,6 +74,15 @@ export function ProjectList({
             onMouseEnter={() => setActiveProject(project)}
             onMouseLeave={() => setActiveProject(null)}
             onClick={() => onProjectClick(project)}
+            role="button"
+            tabIndex={0}
+            aria-label={`View ${project.name} project from ${project.year}`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onProjectClick(project);
+              }
+            }}
             className="group py-12 border-b border-white/5 flex items-center justify-between cursor-pointer transition-all duration-700 hover:pl-6"
           >
             <h3 className="font-headline text-2xl md:text-5xl tracking-tighter group-hover:text-[#DFFF00] group-hover:italic transition-all duration-500 text-white">

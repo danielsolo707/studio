@@ -39,7 +39,7 @@
 }
 
 .font-headline {
-  font-family: 'Syncopate', sans-serif;
+  font-family: var(--font-syncopate), sans-serif;
   text-transform: uppercase;
   letter-spacing: -0.05em;
   text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
@@ -65,3 +65,16 @@
 ::-webkit-scrollbar-thumb {
   background: rgba(223, 255, 0, 0.1);
 }
+
+/* Accessibility: Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

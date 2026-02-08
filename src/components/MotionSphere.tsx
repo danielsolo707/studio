@@ -14,6 +14,9 @@ function FloatingObjects({ mousePos, scrollProgress }: {
   const groupRef = useRef<THREE.Group>(null);
   const { camera } = useThree();
   
+  // Pre-allocate THREE.Vector3 outside useFrame to avoid garbage collection
+  const dirVector = useMemo(() => new THREE.Vector3(), []);
+  
   const objects = useMemo(() => {
     return Array.from({ length: 25 }).map((_, i) => {
       const type = i % 4; // 0: Keyframe, 1: Path, 2: Torus, 3: Icosahedron
@@ -58,10 +61,10 @@ function FloatingObjects({ mousePos, scrollProgress }: {
       const dispersalFactor = scrollProgress * 20;
       const flyPastFactor = scrollProgress > 0.4 ? (scrollProgress - 0.4) * 80 : 0;
       
-      const dir = new THREE.Vector3().fromArray(obj.position).normalize();
-      child.position.x = obj.position[0] + dir.x * dispersalFactor;
-      child.position.y = obj.position[1] + dir.y * dispersalFactor;
-      child.position.z = obj.position[2] + dir.z * flyPastFactor;
+      dirVector.fromArray(obj.position).normalize();
+      child.position.x = obj.position[0] + dirVector.x * dispersalFactor;
+      child.position.y = obj.position[1] + dirVector.y * dispersalFactor;
+      child.position.z = obj.position[2] + dirVector.z * flyPastFactor;
       
       child.rotation.y += scrollProgress * 0.1;
     }
@@ -122,7 +125,7 @@ function Scene({ mousePos, scrollProgress }: {
       <pointLight position={[10, -5, 5]} color="#00F2FF" intensity={50} />
       <ambientLight intensity={0.1} />
       <FloatingObjects mousePos={mousePos} scrollProgress={scrollProgress} />
-      <EffectComposer disableNormalPass>
+      <EffectComposer>
         <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.9} intensity={1.5} />
       </EffectComposer>
     </>
