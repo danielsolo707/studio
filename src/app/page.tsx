@@ -8,11 +8,12 @@ import { MotionSphereCanvas } from '@/components/MotionSphere';
 import { TypographicHero } from '@/components/TypographicHero';
 import { ProjectList } from '@/components/ProjectList';
 import { ProjectOverlay } from '@/components/ProjectOverlay';
+import type { Project } from '@/types/project';
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   
   const { scrollYProgress } = useScroll();
   const smoothProgress = useSpring(scrollYProgress, {
@@ -23,7 +24,7 @@ export default function Home() {
 
   const [currentProgress, setCurrentProgress] = useState(0);
   useEffect(() => {
-    return smoothProgress.onChange(v => setCurrentProgress(v));
+    return smoothProgress.on("change", v => setCurrentProgress(v));
   }, [smoothProgress]);
 
   const backgroundOpacity = useTransform(smoothProgress, [0, 0.4, 0.6, 1], [1, 0.8, 0.4, 0.2]);

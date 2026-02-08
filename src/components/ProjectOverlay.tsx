@@ -5,15 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, PlayCircle } from 'lucide-react';
 import Image from 'next/image';
-
-interface Project {
-  id: string;
-  name: string;
-  year: string;
-  color: string;
-  video: string;
-  description: string;
-}
+import type { Project } from '@/types/project';
 
 export function ProjectOverlay({ 
   project, 
