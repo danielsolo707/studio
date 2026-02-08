@@ -160,6 +160,6 @@ function MotionSphereInner({ mousePos, scrollProgress }: {
 }
 
 export const MotionSphereCanvas = dynamic(
-  () => Promise.resolve(MotionSphereInner),
+  () => Promise.resolve({ default: MotionSphereInner }),
   { ssr: false }
 );
