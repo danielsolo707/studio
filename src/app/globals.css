@@ -35,14 +35,30 @@
   body {
     @apply bg-background text-foreground selection:bg-[#DFFF00] selection:text-black overflow-x-hidden;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 }
 
 .font-headline {
-  font-family: 'Syncopate', sans-serif;
+  font-family: 'Syncopate', -apple-system, BlinkMacSystemFont, sans-serif;
   text-transform: uppercase;
   letter-spacing: -0.05em;
   text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+
+.font-body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 .acid-glow {
