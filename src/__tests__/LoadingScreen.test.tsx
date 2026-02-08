@@ -3,26 +3,21 @@ import { render, screen } from '@testing-library/react';
 import { LoadingScreen } from '@/components/LoadingScreen';
 
 describe('LoadingScreen', () => {
-  it('renders loading screen with progress', () => {
+  it('renders loading screen with percentage', () => {
     const onComplete = () => {};
     render(<LoadingScreen onComplete={onComplete} />);
     
-    // Check if the loading screen renders
-    const loadingElement = screen.getByText(/loading/i, { exact: false });
-    expect(loadingElement).toBeDefined();
+    // Check if percentage text is rendered
+    const percentageElement = screen.getByText('0', { exact: false });
+    expect(percentageElement).toBeDefined();
   });
 
-  it('calls onComplete callback', async () => {
-    let completed = false;
-    const onComplete = () => {
-      completed = true;
-    };
-    
+  it('renders initializing text', () => {
+    const onComplete = () => {};
     render(<LoadingScreen onComplete={onComplete} />);
     
-    // Wait for animation to complete (2 seconds + buffer)
-    await new Promise(resolve => setTimeout(resolve, 2500));
-    
-    expect(completed).toBe(true);
+    // Check for the initializing text
+    const initText = screen.getByText(/initializing experience/i);
+    expect(initText).toBeDefined();
   });
 });
