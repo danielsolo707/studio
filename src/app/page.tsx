@@ -8,6 +8,7 @@ import { MotionSphereCanvas } from '@/components/MotionSphere';
 import { TypographicHero } from '@/components/TypographicHero';
 import { ProjectList } from '@/components/ProjectList';
 import { ProjectOverlay } from '@/components/ProjectOverlay';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import type { Project } from '@/types/project';
 
 export default function Home() {
@@ -50,7 +51,9 @@ export default function Home() {
             style={{ opacity: backgroundOpacity }}
             className="fixed inset-0 z-0"
           >
-            <MotionSphereCanvas mousePos={mousePos} scrollProgress={currentProgress} />
+            <ErrorBoundary>
+              <MotionSphereCanvas mousePos={mousePos} scrollProgress={currentProgress} />
+            </ErrorBoundary>
           </motion.div>
 
           <TypographicHero />
@@ -115,6 +118,7 @@ export default function Home() {
               
               <motion.a 
                 href="mailto:hello@daniel.design"
+                aria-label="Send email to hello@daniel.design"
                 className="group relative block"
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -128,8 +132,22 @@ export default function Home() {
             <footer className="absolute bottom-12 w-full flex justify-between px-12 text-[8px] font-headline tracking-[0.5em] text-muted-foreground uppercase">
               <div className="opacity-40">© 2026 DANIEL PORTFOLIO</div>
               <div className="flex gap-12">
-                <a href="#" className="hover:text-[#DFFF00] transition-colors">Instagram</a>
-                <a href="#" className="hover:text-[#DFFF00] transition-colors">Vimeo</a>
+                <a 
+                  href="#" 
+                  onClick={(e) => e.preventDefault()}
+                  aria-label="Instagram (coming soon)"
+                  className="hover:text-[#DFFF00] transition-colors cursor-default"
+                >
+                  Instagram
+                </a>
+                <a 
+                  href="#" 
+                  onClick={(e) => e.preventDefault()}
+                  aria-label="Vimeo (coming soon)"
+                  className="hover:text-[#DFFF00] transition-colors cursor-default"
+                >
+                  Vimeo
+                </a>
               </div>
             </footer>
           </section>
