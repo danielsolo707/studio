@@ -114,7 +114,6 @@ export function ProjectList({
               alt={activeProject.name}
               fill
               className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-              data-ai-hint="motion design"
             />
           </motion.div>
         )}

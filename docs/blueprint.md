@@ -9,7 +9,6 @@
 - Interactive Project List: Minimalist project list with project name and year. Hovering transforms the background mercury into a flat disk, shows a video preview next to the mouse, and changes the mercury reflection color to match the project theme.
 - Cinematic Project Overlay: Clicking a project expands a rectangle to full screen, plays the project video, and displays project information with a type-on animation. Includes a back/close button that appears on scroll.
 - Minimal Contact Transition: At the end of the scroll, the liquid mercury shrinks into a shining point on the 'GET IN TOUCH' button.
-- AI-Powered Portfolio Suggestion Tool: Use AI to suggest improvements and highlight the strengths of the existing portfolio. Provide actionable steps that the designer can take. Incorporate prompts to make it SEO friendly. Use the tool to determine which suggestions to give.
 
 ## Style Guidelines:
 
