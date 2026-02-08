@@ -1,5 +1,3 @@
-# MotionVerse
-
 A cinematic motion design portfolio experience built with Next.js 15, React 19, Three.js, and Framer Motion.
 
 ## ✨ Features
